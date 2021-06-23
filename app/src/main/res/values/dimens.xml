@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="spacing_xs">5dp</dimen>
+    <dimen name="spacing_sm">10dp</dimen>
+    <dimen name="spacing_md">15dp</dimen>
+    <dimen name="spacing_lg">20dp</dimen>
+    <dimen name="spacing_xl">30dp</dimen>
+
+    <dimen name="standard_button_height">60dp</dimen>
+    <dimen name="standard_button_radius">30dp</dimen>
+</resources>
