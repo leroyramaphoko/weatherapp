@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/currentWeatherFragment">
+
+    <fragment
+        android:id="@+id/currentWeatherFragment"
+        android:name="com.dvt.weatherapp.ui.fragment.CurrentWeatherFragment"
+        android:label=""
+        tools:layout="@layout/fragment_current_weather" />
+    <fragment
+        android:id="@+id/favoriteWeatherLocationsFragment"
+        android:name="com.dvt.weatherapp.ui.fragment.FavoriteWeatherLocationsFragment"
+        android:label="@string/current_weather_locations"
+        tools:layout="@layout/fragment_favorite_weather_locations" />
+</navigation>
