@@ -11,14 +11,18 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("weather?q=Johannesburg")
+    @GET("weather")
     suspend fun getWeather(
+        @Query(AppConstants.LAT) latitude: Double,
+        @Query(AppConstants.LON) longitude: Double,
         @Query(AppConstants.APP_ID) appId: String = BuildConfig.WEATHER_API_KEY,
         @Query(AppConstants.UNITS) units: String = AppSettings.PREFERRED_TEMPERATURE_UNIT.unit
     ): Response<CurrentWeatherResponse>
 
-    @GET("forecast?q=Johannesburg")
+    @GET("forecast")
     suspend fun getForecast(
+        @Query(AppConstants.LAT) latitude: Double,
+        @Query(AppConstants.LON) longitude: Double,
         @Query(AppConstants.APP_ID) appId: String = BuildConfig.WEATHER_API_KEY,
         @Query(AppConstants.UNITS) units: String = AppSettings.PREFERRED_TEMPERATURE_UNIT.unit
     ):Response<ForecastResponse>

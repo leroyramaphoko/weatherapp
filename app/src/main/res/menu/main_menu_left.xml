@@ -7,7 +7,7 @@
             android:checked="true"
             android:icon="@drawable/ic_current_location" />
 
-        <item android:id="@+id/worldWeatherLocationsFragment"
+        <item android:id="@+id/exploreFragment"
             android:title="@string/explore_the_world"
             android:icon="@drawable/ic_earth" />
 

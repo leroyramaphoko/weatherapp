@@ -5,6 +5,12 @@ import com.dvt.weatherapp.data.response.ForecastResponse
 import retrofit2.Response
 
 interface IApiHelper {
-    suspend fun getWeather(): Response<CurrentWeatherResponse>
-    suspend fun getForecast(): Response<ForecastResponse>
+    suspend fun getWeather(
+        latitude: Double,
+        longitude: Double
+    ): Response<CurrentWeatherResponse>
+    suspend fun getForecast(
+        latitude: Double,
+        longitude: Double
+    ): Response<ForecastResponse>
 }

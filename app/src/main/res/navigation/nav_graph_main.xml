@@ -11,6 +11,11 @@
         android:label=""
         tools:layout="@layout/fragment_current_weather" />
     <fragment
+        android:id="@+id/exploreFragment"
+        android:name="com.dvt.weatherapp.ui.fragment.ExploreFragment"
+        android:label="fragment_explore"
+        tools:layout="@layout/fragment_explore" />
+    <fragment
         android:id="@+id/favoriteWeatherLocationsFragment"
         android:name="com.dvt.weatherapp.ui.fragment.FavoriteWeatherLocationsFragment"
         android:label="@string/current_weather_locations"
