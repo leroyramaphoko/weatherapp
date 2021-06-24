@@ -88,6 +88,7 @@
             app:showIf="@{viewModel.state == CurrentWeatherState.LOADING}"/>
 
         <com.dvt.weatherapp.ui.view.ErrorView
+            android:id="@+id/view_error"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"

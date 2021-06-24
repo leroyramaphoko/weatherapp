@@ -9,6 +9,12 @@ import javax.inject.Inject
 class ApiHelper @Inject constructor(
     private val apiService: ApiService
 ): IApiHelper {
-    override suspend fun getWeather(): Response<CurrentWeatherResponse> = apiService.getWeather()
-    override suspend fun getForecast(): Response<ForecastResponse> = apiService.getForecast()
+    override suspend fun getWeather(
+        latitude: Double,
+        longitude: Double
+    ): Response<CurrentWeatherResponse> = apiService.getWeather(latitude, longitude)
+    override suspend fun getForecast(
+        latitude: Double,
+        longitude: Double
+    ): Response<ForecastResponse> = apiService.getForecast(latitude, longitude)
 }

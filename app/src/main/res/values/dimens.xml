@@ -4,8 +4,10 @@
     <dimen name="spacing_sm">10dp</dimen>
     <dimen name="spacing_md">15dp</dimen>
     <dimen name="spacing_lg">20dp</dimen>
-    <dimen name="spacing_xl">30dp</dimen>
+    <dimen name="spacing_xl">25dp</dimen>
 
     <dimen name="standard_button_height">60dp</dimen>
     <dimen name="standard_button_radius">30dp</dimen>
+
+    <dimen name="bottom_dialog_corner_radius">15dp</dimen>
 </resources>

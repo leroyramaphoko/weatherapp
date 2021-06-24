@@ -21,82 +21,12 @@ import javax.inject.Inject
 @HiltViewModel
 class CurrentWeatherViewModel @Inject constructor(
     application: Application,
-    private val repository: MainRepository
-): AndroidViewModel(application) {
-
-    private val _state = MutableLiveData<CurrentWeatherState>()
-    val state: LiveData<CurrentWeatherState>
-        get() = _state
-
-    private val _currentWeather = MutableLiveData<CurrentWeatherResponse>()
-    val currentWeather: LiveData<CurrentWeatherResponse>
-        get() = _currentWeather
-
-    private val _temperatureList = MutableLiveData<List<TemperatureModel>>()
-    val temperatureList: LiveData<List<TemperatureModel>>
-        get() = _temperatureList
-
-    private val _forecastList = MutableLiveData<List<CurrentWeatherResponse>>()
-    val forecastList: LiveData<List<CurrentWeatherResponse>>
-        get() = _forecastList
+    repository: MainRepository
+): BaseWeatherViewModel(application, repository) {
 
     init {
-        fetchWeather()
+        // TODO: Use the current lat lon
+        fetchWeather(-26.125210, 27.931410)
     }
 
-    private fun fetchWeather() = viewModelScope.launch(Dispatchers.IO) {
-        _state.postValue(CurrentWeatherState.LOADING)
-
-        val result = repository.getWeather()
-
-        if (result.isSuccessful) {
-            val data = result.body()
-            val currentWeather = data!!
-            _currentWeather.postValue(currentWeather)
-            _temperatureList.postValue(buildTemperatureList(currentWeather.main))
-            fetchForecast()
-        } else {
-            _state.postValue(CurrentWeatherState.ERROR)
-        }
-    }
-
-    private fun fetchForecast() = viewModelScope.launch(Dispatchers.IO) {
-        val result = repository.getForecast()
-
-        if (result.isSuccessful) {
-            val data = result.body()!!
-            val uniqueWeekDays = data.list
-                .distinctBy { DateTimeUtil.format(it.dateTimeUnix, DateFormat.DAY_IN_FULL) }
-                .filter { DateTimeUtil.isDayInTheFuture(it.dateTimeUnix) }
-            _forecastList.postValue(uniqueWeekDays)
-            _state.postValue(CurrentWeatherState.SUCCESS)
-        } else {
-            _state.postValue(CurrentWeatherState.ERROR)
-        }
-    }
-
-    private fun buildTemperatureList(weatherMain: WeatherMain): List<TemperatureModel> {
-        return listOf(
-            TemperatureModel(
-                title = getString(R.string.min),
-                degree = weatherMain.temperatureMin
-            ),
-            TemperatureModel(
-                title = getString(R.string.current),
-                degree = weatherMain.temperature
-            ),
-            TemperatureModel(
-                title = getString(R.string.max),
-                degree = weatherMain.temperatureMax
-            )
-        )
-    }
-
-    private fun getString(@StringRes stringRes: Int): String {
-        return getApplication<Application>().getString(stringRes)
-    }
-
-    fun onRetryClicked() {
-        fetchWeather()
-    }
 }
