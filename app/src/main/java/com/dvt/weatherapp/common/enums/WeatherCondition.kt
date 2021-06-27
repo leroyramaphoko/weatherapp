@@ -10,9 +10,9 @@ enum class WeatherCondition(val minId: Int, val maxId: Int) {
     CLOUDS(801, 804);
 
     companion object {
-        fun Int.toWeatherCondition(): WeatherCondition? {
+        fun from(weatherId: Int): WeatherCondition? {
             values().forEach {
-                if (it.minId >= this && it.maxId <= this) {
+                if (it.minId >= weatherId && it.maxId <= weatherId) {
                     return it
                 }
             }

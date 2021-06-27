@@ -12,8 +12,8 @@ fun View.gone() {
 
 fun View.showIf(visible: Boolean) {
     if (visible) {
-        this.visible()
+        visible()
     } else {
-        this.gone()
+        gone()
     }
 }

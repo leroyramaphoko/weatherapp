@@ -28,8 +28,6 @@ import kotlinx.android.synthetic.main.fragment_weather_details.*
 class WeatherDetailsFragment : BottomSheetDialogFragment() {
     private var latLong: LatLng? = null
     private val viewModel by viewModels<WeatherDetailsViewModel>()
-    private lateinit var temperatureAdapter: TemperatureAdapter
-    private lateinit var forecastAdapter: ForecastAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,8 +41,6 @@ class WeatherDetailsFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setAdapters()
 
         arguments?.let { bundle ->
             latLong = bundle.getParcelable(LAT_LON)
@@ -62,28 +58,10 @@ class WeatherDetailsFragment : BottomSheetDialogFragment() {
         setObservers()
     }
 
-    private fun setAdapters() {
-        temperatureAdapter = TemperatureAdapter()
-        val layoutManager = FlexboxLayoutManager(requireContext(), FlexDirection.ROW)
-        layoutManager.justifyContent = JustifyContent.SPACE_BETWEEN
-
-        recycler_view_temperature.apply {
-            this.layoutManager = layoutManager
-            adapter = temperatureAdapter
-        }
-
-        forecastAdapter = ForecastAdapter()
-        recycler_view_forecast.adapter = forecastAdapter
-    }
-
     private fun setObservers() {
         viewModel.apply {
-            temperatureList.observe(viewLifecycleOwner) {
-                temperatureAdapter.submitList(it)
-            }
-
-            forecastList.observe(viewLifecycleOwner) {
-                forecastAdapter.submitList(it)
+            weatherWithForecastModel.observe(viewLifecycleOwner) {
+                view_weather.setWeatherWithForecastModel(it)
             }
         }
     }

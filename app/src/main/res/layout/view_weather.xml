@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data class="WeatherViewBinding" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_weather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_temperature" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_forecast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_forecast"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

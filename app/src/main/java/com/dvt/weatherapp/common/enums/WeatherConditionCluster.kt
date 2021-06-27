@@ -3,7 +3,6 @@ package com.dvt.weatherapp.common.enums
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import com.dvt.weatherapp.R
-import com.dvt.weatherapp.common.enums.WeatherCondition.Companion.toWeatherCondition
 
 enum class WeatherConditionCluster(@DrawableRes val backgroundImage: Int? = null,
                                    @ColorRes val colorRes: Int? = null,
@@ -29,8 +28,8 @@ enum class WeatherConditionCluster(@DrawableRes val backgroundImage: Int? = null
     UNKNOWN;
 
     companion object {
-        fun Int.toWeatherConditionCluster(): WeatherConditionCluster {
-            val weatherCondition = this.toWeatherCondition()
+        fun from(weatherId: Int): WeatherConditionCluster {
+            val weatherCondition = WeatherCondition.from(weatherId)
             values().forEach {
                 if (it.weatherConditions.contains(weatherCondition)) {
                     return it
