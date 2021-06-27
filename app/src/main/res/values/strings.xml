@@ -12,6 +12,7 @@
     <string name="search">Search</string>
     <string name="location">Location</string>
     <string name="lat_lon">%s lat / %s lon</string>
+    <string name="location_rationale">You need to allow the location permission in order to continue.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
