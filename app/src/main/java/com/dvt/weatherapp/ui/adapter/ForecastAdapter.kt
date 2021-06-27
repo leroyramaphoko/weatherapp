@@ -5,12 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.dvt.weatherapp.R
 import com.dvt.weatherapp.common.enums.DateFormat
-import com.dvt.weatherapp.common.enums.WeatherCondition
-import com.dvt.weatherapp.common.enums.WeatherConditionCluster
-import com.dvt.weatherapp.common.enums.WeatherConditionCluster.Companion.toWeatherConditionCluster
 import com.dvt.weatherapp.common.util.DateTimeUtil
+import com.dvt.weatherapp.common.util.ImageUtil
 import com.dvt.weatherapp.data.response.CurrentWeatherResponse
 import com.dvt.weatherapp.databinding.ForecastBinding
 
@@ -24,25 +21,18 @@ class ForecastAdapter: ListAdapter<CurrentWeatherResponse, ForecastAdapter.ViewH
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val weather = getItem(position)
+        val weatherResponse = getItem(position)
 
-        holder.textWeekDay.text = DateTimeUtil.format(weather.dateTimeUnix, DateFormat.DAY_IN_FULL)
+        holder.textWeekDay.text = DateTimeUtil.format(weatherResponse.dateTimeUnix, DateFormat.DAY_IN_FULL)
 
-        weather.weather.firstOrNull()?.let {
-            val weatherConditionCluster = it.id.toWeatherConditionCluster()
-//            weatherConditionCluster(weatherConditionCluster)
+        weatherResponse.weather.firstOrNull()?.let { weather ->
+            ImageUtil.getForecastWeatherIcon(weather.id)?.let {
+                holder.iconWeather.setImageResource(it)
+            }
         }
 
-        holder.bind(weather)
+        holder.bind(weatherResponse)
     }
-
-//    private fun weatherConditionCluster(weatherConditionCluster: WeatherConditionCluster): Int {
-//        return when (weatherConditionCluster) {
-//            WeatherConditionCluster.RAINY -> R.drawable.rain
-//            WeatherConditionCluster.SUNNY -> R.drawable.partlysunny
-//            WeatherConditionCluster.CLOUDY -> R.drawable.partlysunny
-//        }
-//    }
 
     private class DiffCallback : DiffUtil.ItemCallback<CurrentWeatherResponse>() {
 
@@ -57,6 +47,7 @@ class ForecastAdapter: ListAdapter<CurrentWeatherResponse, ForecastAdapter.ViewH
 
     class ViewHolder(private val binding: ForecastBinding) : RecyclerView.ViewHolder(binding.root) {
         val textWeekDay = binding.textWeekDay
+        val iconWeather = binding.iconWeather
 
         fun bind(weather: CurrentWeatherResponse) {
             binding.weather = weather

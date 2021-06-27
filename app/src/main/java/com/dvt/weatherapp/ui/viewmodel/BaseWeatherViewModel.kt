@@ -1,41 +1,29 @@
 package com.dvt.weatherapp.ui.viewmodel
 
-import android.app.Application
-import androidx.annotation.StringRes
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dvt.weatherapp.R
 import com.dvt.weatherapp.common.enums.DateFormat
-import com.dvt.weatherapp.common.model.TemperatureModel
-import com.dvt.weatherapp.common.model.WeatherMain
+import com.dvt.weatherapp.common.model.WeatherWithForecastModel
 import com.dvt.weatherapp.common.util.DateTimeUtil
 import com.dvt.weatherapp.data.repository.MainRepository
 import com.dvt.weatherapp.data.response.CurrentWeatherResponse
-import com.dvt.weatherapp.ui.enums.CurrentWeatherState
+import com.dvt.weatherapp.ui.enums.WeatherState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 abstract class BaseWeatherViewModel(
-    application: Application,
     private val repository: MainRepository
-): AndroidViewModel(application) {
-    private val _state = MutableLiveData<CurrentWeatherState>()
-    val state: LiveData<CurrentWeatherState>
+): ViewModel() {
+
+    private val _state = MutableLiveData<WeatherState>()
+    val state: LiveData<WeatherState>
         get() = _state
 
-    private val _currentWeather = MutableLiveData<CurrentWeatherResponse>()
-    val currentWeather: LiveData<CurrentWeatherResponse>
-        get() = _currentWeather
-
-    private val _temperatureList = MutableLiveData<List<TemperatureModel>>()
-    val temperatureList: LiveData<List<TemperatureModel>>
-        get() = _temperatureList
-
-    private val _forecastList = MutableLiveData<List<CurrentWeatherResponse>>()
-    val forecastList: LiveData<List<CurrentWeatherResponse>>
-        get() = _forecastList
+    private val _weatherWithForecastModel = MutableLiveData<WeatherWithForecastModel>()
+    val weatherWithForecastModel: LiveData<WeatherWithForecastModel>
+        get() = _weatherWithForecastModel
 
     private var _latitude: Double? = null
     private var _longitude: Double? = null
@@ -43,55 +31,46 @@ abstract class BaseWeatherViewModel(
     fun fetchWeather(latitude: Double, longitude: Double) = viewModelScope.launch(Dispatchers.IO) {
         _latitude = latitude
         _longitude = longitude
-        _state.postValue(CurrentWeatherState.LOADING)
+        setState(WeatherState.LOADING)
 
         val result = repository.getWeather(latitude, longitude)
 
         if (result.isSuccessful) {
             val data = result.body()
             val currentWeather = data!!
-            _currentWeather.postValue(currentWeather)
-            _temperatureList.postValue(buildTemperatureList(currentWeather.main))
-            fetchForecast()
+            fetchForecast(latitude, longitude, currentWeather)
         } else {
-            _state.postValue(CurrentWeatherState.ERROR)
+            setState(WeatherState.ERROR)
         }
     }
 
-    private fun fetchForecast() = viewModelScope.launch(Dispatchers.IO) {
-        val result = repository.getForecast(28.0436, -26.2023)
+    private fun fetchForecast(
+        latitude: Double,
+        longitude: Double,
+        currentWeather: CurrentWeatherResponse
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        val result = repository.getForecast(latitude, longitude)
 
         if (result.isSuccessful) {
             val data = result.body()!!
-            val uniqueWeekDays = data.list
+            val forecastList = data.list
                 .distinctBy { DateTimeUtil.format(it.dateTimeUnix, DateFormat.DAY_IN_FULL) }
                 .filter { DateTimeUtil.isDayInTheFuture(it.dateTimeUnix) }
-            _forecastList.postValue(uniqueWeekDays)
-            _state.postValue(CurrentWeatherState.SUCCESS)
+
+            val weatherWithForecastModel = WeatherWithForecastModel(
+                weather = currentWeather,
+                forecastList = forecastList
+            )
+
+            _weatherWithForecastModel.postValue(weatherWithForecastModel)
+            setState(WeatherState.SUCCESS)
         } else {
-            _state.postValue(CurrentWeatherState.ERROR)
+            setState(WeatherState.ERROR)
         }
     }
 
-    private fun buildTemperatureList(weatherMain: WeatherMain): List<TemperatureModel> {
-        return listOf(
-            TemperatureModel(
-                title = getString(R.string.min),
-                degree = weatherMain.temperatureMin
-            ),
-            TemperatureModel(
-                title = getString(R.string.current),
-                degree = weatherMain.temperature
-            ),
-            TemperatureModel(
-                title = getString(R.string.max),
-                degree = weatherMain.temperatureMax
-            )
-        )
-    }
-
-    private fun getString(@StringRes stringRes: Int): String {
-        return getApplication<Application>().getString(stringRes)
+    private fun setState(state: WeatherState) {
+        _state.postValue(state)
     }
 
     fun onRetryClicked() {

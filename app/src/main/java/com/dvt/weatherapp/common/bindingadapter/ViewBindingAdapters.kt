@@ -1,4 +1,4 @@
-package com.dvt.weatherapp.common.databinding
+package com.dvt.weatherapp.common.bindingadapter
 
 import android.view.View
 import androidx.databinding.BindingAdapter
