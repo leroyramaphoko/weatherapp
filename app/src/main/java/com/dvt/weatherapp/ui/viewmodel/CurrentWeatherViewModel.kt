@@ -9,9 +9,4 @@ class CurrentWeatherViewModel @Inject constructor(
     repository: MainRepository
 ): BaseWeatherViewModel(repository) {
 
-    init {
-        // TODO: Use the current lat lon
-        fetchWeather(-26.125210, 27.931410)
-    }
-
 }

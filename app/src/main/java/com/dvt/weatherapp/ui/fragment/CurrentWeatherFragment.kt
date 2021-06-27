@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.dvt.weatherapp.data.response.CurrentWeatherResponse
 import com.dvt.weatherapp.databinding.CurrentWeatherBinding
 import com.dvt.weatherapp.ui.viewmodel.CurrentWeatherViewModel
+import com.dvt.weatherapp.ui.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_current_weather.*
 
@@ -16,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_current_weather.*
 class CurrentWeatherFragment : Fragment() {
 
     private val viewModel by viewModels<CurrentWeatherViewModel>()
+    private val sharedViewModel by activityViewModels<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,6 +27,7 @@ class CurrentWeatherFragment : Fragment() {
         val binding = CurrentWeatherBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+
         return binding.root
     }
 
@@ -36,6 +40,10 @@ class CurrentWeatherFragment : Fragment() {
     }
 
     private fun setObservers() {
+        sharedViewModel.currentLocation.observe(viewLifecycleOwner) {
+            viewModel.fetchWeather(it.latitude, it.longitude)
+        }
+
         viewModel.apply {
             weatherWithForecastModel.observe(viewLifecycleOwner) {
                 displayCurrentWeatherCondition(it.weather)
