@@ -8,5 +8,11 @@ import javax.inject.Inject
 class WeatherDetailsViewModel @Inject constructor(
     repository: MainRepository
 ): BaseWeatherViewModel(repository) {
+    fun onFabFavoriteLocationClicked() {
+        val weatherWithForecastModel = weatherWithForecastModel.value ?: return
+        weatherWithForecastModel.favorite = !weatherWithForecastModel.favorite
+
+        setWeatherWithForecastModel(weatherWithForecastModel)
+    }
 
 }

@@ -66,7 +66,7 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_"
+                android:id="@+id/fab_favorite_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -76,7 +76,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="@color/white"
-                android:src="@drawable/ic_favorite"
+                android:src="@{viewModel.weatherWithForecastModel.favorite ? @drawable/ic_favorite : @drawable/ic_favorite_unshaded}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:tint="@color/colorPrimary" />

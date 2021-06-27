@@ -1,6 +1,6 @@
 package com.dvt.weatherapp.common.enums
 
-enum class WeatherCondition(val minId: Int, val maxId: Int) {
+enum class WeatherCondition(val min: Int, val max: Int) {
     THUNDERSTORM(200, 232),
     DRIZZLE(300, 321),
     RAIN(500, 531),
@@ -12,7 +12,7 @@ enum class WeatherCondition(val minId: Int, val maxId: Int) {
     companion object {
         fun from(weatherId: Int): WeatherCondition? {
             values().forEach {
-                if (it.minId >= weatherId && it.maxId <= weatherId) {
+                if (weatherId in it.min..it.max) {
                     return it
                 }
             }

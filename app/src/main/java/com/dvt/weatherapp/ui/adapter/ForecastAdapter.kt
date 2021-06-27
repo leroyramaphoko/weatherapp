@@ -37,7 +37,7 @@ class ForecastAdapter: ListAdapter<CurrentWeatherResponse, ForecastAdapter.ViewH
     private class DiffCallback : DiffUtil.ItemCallback<CurrentWeatherResponse>() {
 
         override fun areItemsTheSame(oldItem: CurrentWeatherResponse, newItem: CurrentWeatherResponse): Boolean {
-            return oldItem == newItem
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: CurrentWeatherResponse, newItem: CurrentWeatherResponse): Boolean {

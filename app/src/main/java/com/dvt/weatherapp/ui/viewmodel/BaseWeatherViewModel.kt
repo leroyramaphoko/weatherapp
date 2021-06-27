@@ -59,7 +59,8 @@ abstract class BaseWeatherViewModel(
 
             val weatherWithForecastModel = WeatherWithForecastModel(
                 weather = currentWeather,
-                forecastList = forecastList
+                forecastList = forecastList,
+                favorite = false
             )
 
             _weatherWithForecastModel.postValue(weatherWithForecastModel)
@@ -79,4 +80,9 @@ abstract class BaseWeatherViewModel(
 
         fetchWeather(latitude, longitude)
     }
+
+    fun setWeatherWithForecastModel(weatherWithForecastModel: WeatherWithForecastModel) {
+        _weatherWithForecastModel.value = weatherWithForecastModel
+    }
+
 }

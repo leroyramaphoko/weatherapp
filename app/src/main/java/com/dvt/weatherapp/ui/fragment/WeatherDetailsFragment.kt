@@ -56,7 +56,16 @@ class WeatherDetailsFragment : BottomSheetDialogFragment() {
         }
 
         setObservers()
+
+        setClickListeners()
     }
+
+    private fun setClickListeners() {
+        fab_favorite_location.setOnClickListener {
+            viewModel.onFabFavoriteLocationClicked()
+        }
+    }
+
 
     private fun setObservers() {
         viewModel.apply {
