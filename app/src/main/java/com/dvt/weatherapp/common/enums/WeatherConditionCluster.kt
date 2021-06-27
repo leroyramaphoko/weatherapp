@@ -16,7 +16,7 @@ enum class WeatherConditionCluster(@DrawableRes val backgroundImage: Int? = null
     ),
     SUNNY(
         R.drawable.forest_sunny,
-        R.color.rainy,
+        R.color.sunny,
         WeatherCondition.ATMOSPHERE,
         WeatherCondition.CLEAR
     ),

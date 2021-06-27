@@ -13,7 +13,7 @@
     <fragment
         android:id="@+id/exploreFragment"
         android:name="com.dvt.weatherapp.ui.fragment.ExploreFragment"
-        android:label="fragment_explore"
+        android:label="@string/explore_the_world"
         tools:layout="@layout/fragment_explore" />
     <fragment
         android:id="@+id/favoriteWeatherLocationsFragment"

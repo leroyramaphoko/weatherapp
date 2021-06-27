@@ -12,16 +12,20 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/spacing_sm"
         android:gravity="center_horizontal"
+        tools:background="@color/sunny"
         android:orientation="vertical">
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textColor="@color/primaryTextColor"
             app:degree="@{temperature.degree}"
             tools:text="18°" />
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/primaryTextColor"
             android:text="@{temperature.title}"
             tools:text="Current" />
     </androidx.appcompat.widget.LinearLayoutCompat>

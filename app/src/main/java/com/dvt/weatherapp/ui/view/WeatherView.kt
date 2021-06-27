@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import com.dvt.weatherapp.R
 import com.dvt.weatherapp.common.model.TemperatureModel
 import com.dvt.weatherapp.common.model.WeatherMain
@@ -15,6 +16,7 @@ import com.dvt.weatherapp.ui.adapter.TemperatureAdapter
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import kotlinx.android.synthetic.main.fragment_current_weather.*
 
 class WeatherView @JvmOverloads constructor(
     context: Context,
@@ -36,6 +38,10 @@ class WeatherView @JvmOverloads constructor(
     fun setWeatherWithForecastModel(weatherWithForecastModel: WeatherWithForecastModel) {
         setTemperatureAdapter(weatherWithForecastModel.weather.main)
         setForecastAdapter(weatherWithForecastModel)
+
+        weatherWithForecastModel.weather.getWeatherConditionCluster()?.let {
+            it.colorRes?.let { colorRes -> binding.container.setBackgroundColor(ContextCompat.getColor(context, colorRes)) }
+        }
     }
 
     private fun setTemperatureAdapter(main: WeatherMain) {
