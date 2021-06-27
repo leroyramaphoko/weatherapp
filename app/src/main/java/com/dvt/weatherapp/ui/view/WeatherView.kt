@@ -44,7 +44,8 @@ class WeatherView @JvmOverloads constructor(
         }
     }
 
-    private fun setTemperatureAdapter(main: WeatherMain) {
+    private fun setTemperatureAdapter(main: WeatherMain?) {
+        if (main == null) return
         val adapter = TemperatureAdapter()
 
         val layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW)

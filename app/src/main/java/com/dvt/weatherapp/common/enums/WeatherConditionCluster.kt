@@ -21,8 +21,8 @@ enum class WeatherConditionCluster(@DrawableRes val backgroundImage: Int? = null
         WeatherCondition.CLEAR
     ),
     CLOUDY(
-        R.color.cloudy,
         R.drawable.forest_cloudy,
+        R.color.cloudy,
         WeatherCondition.CLOUDS
     ),
     UNKNOWN;

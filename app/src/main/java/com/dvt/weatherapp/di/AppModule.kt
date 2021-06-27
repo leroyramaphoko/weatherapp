@@ -6,6 +6,7 @@ import com.dvt.weatherapp.BuildConfig
 import com.dvt.weatherapp.data.api.helper.ApiHelper
 import com.dvt.weatherapp.data.api.helper.IApiHelper
 import com.dvt.weatherapp.data.api.service.ApiService
+import com.dvt.weatherapp.data.db.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -63,16 +64,16 @@ object AppModule{
     @Singleton
     fun provideApiHelper(apiHelper: ApiHelper): IApiHelper = apiHelper
 
-//    @Provides
-//    @Singleton
-//    fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
-//        return Room.databaseBuilder(
-//            appContext,
-//            AppDatabase::class.java,
-//            DB_NAME
-//        ).build()
-//    }
-//
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
+        return Room.databaseBuilder(
+            appContext,
+            AppDatabase::class.java,
+            DB_NAME
+        ).build()
+    }
+
 //    @Provides
 //    fun provideCompanyDao(appDatabase: AppDatabase): CompanyDao = appDatabase.companyDao()
 //

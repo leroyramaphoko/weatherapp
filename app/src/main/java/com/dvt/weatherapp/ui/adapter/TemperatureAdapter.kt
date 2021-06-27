@@ -26,7 +26,7 @@ class TemperatureAdapter: ListAdapter<TemperatureModel, TemperatureAdapter.ViewH
     private class DiffCallback : DiffUtil.ItemCallback<TemperatureModel>() {
 
         override fun areItemsTheSame(oldItem: TemperatureModel, newItem: TemperatureModel): Boolean {
-            return oldItem == newItem
+            return oldItem.title == newItem.title
         }
 
         override fun areContentsTheSame(oldItem: TemperatureModel, newItem: TemperatureModel): Boolean {
