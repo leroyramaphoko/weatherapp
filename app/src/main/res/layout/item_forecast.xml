@@ -8,16 +8,20 @@
             type="com.dvt.weatherapp.data.response.CurrentWeatherResponse" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#012432"
-        android:paddingHorizontal="@dimen/spacing_sm">
+        android:columnCount="3"
+        android:padding="@dimen/spacing_sm"
+        tools:background="@color/sunny">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_week_day"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:textColor="@color/primaryTextColor"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
             tools:text="Tuesday"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,20 +31,24 @@
             android:id="@+id/icon_weather"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            app:layout_constraintEnd_toStartOf="@+id/text_temperature"
-            app:layout_constraintStart_toEndOf="@+id/text_week_day"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_columnWeight="1"
+            android:gravity="center_horizontal"
+            android:textColor="@color/primaryTextColor"
             tools:srcCompat="@drawable/rain" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_temperature"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:gravity="end"
+            android:textColor="@color/primaryTextColor"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
             app:degree="@{weather.main.temperature}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="24°" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </GridLayout>
 </layout>

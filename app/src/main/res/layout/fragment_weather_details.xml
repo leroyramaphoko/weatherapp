@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="@dimen/spacing_sm"
+        android:paddingHorizontal="@dimen/spacing_xs"
         tools:context=".ui.fragment.WeatherDetailsFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
-                android:paddingHorizontal="@dimen/spacing_sm"
+                android:paddingHorizontal="@dimen/spacing_xs"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -55,6 +55,7 @@
                     android:id="@+id/view_weather"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
                     app:showIf="@{viewModel.state == WeatherState.SUCCESS}"/>
 
                 <com.dvt.weatherapp.ui.view.LoadingView

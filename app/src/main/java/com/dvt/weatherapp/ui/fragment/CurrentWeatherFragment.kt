@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.dvt.weatherapp.data.response.CurrentWeatherResponse
 import com.dvt.weatherapp.databinding.CurrentWeatherBinding
+import com.dvt.weatherapp.ui.enums.WeatherState
 import com.dvt.weatherapp.ui.viewmodel.CurrentWeatherViewModel
 import com.dvt.weatherapp.ui.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +57,7 @@ class CurrentWeatherFragment : Fragment() {
     private fun displayCurrentWeatherCondition(currentWeather: CurrentWeatherResponse) {
         currentWeather.getWeatherConditionCluster()?.let {
             text_weather_condition.text = it.name
+            it.colorRes?.let { colorRes -> container.setBackgroundColor(ContextCompat.getColor(requireContext(), colorRes)) }
             it.backgroundImage?.let { image -> image_weather.setImageResource(image) }
         }
     }
