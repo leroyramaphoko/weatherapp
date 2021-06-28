@@ -28,5 +28,9 @@ class DateTimeUtil {
 
             return targetCalendar.get(Calendar.DAY_OF_MONTH) > Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         }
+
+        fun getCurrentTimeMills(): Long {
+            return System.currentTimeMillis() / 1000L
+        }
     }
 }

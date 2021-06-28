@@ -1,11 +1,15 @@
 package com.dvt.weatherapp.ui.fragment
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.annotation.DrawableRes
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -23,14 +27,14 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_explore.*
 
+
 @AndroidEntryPoint
 class ExploreFragment : Fragment(), GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
+    private var currentLocationMarker: MarkerOptions? = null
     private lateinit var headerView: View
     private lateinit var adapter: FavoriteLocationWeatherAdapter
     private var lastKnownLocation: Location? = null
@@ -64,7 +68,9 @@ class ExploreFragment : Fragment(), GoogleMap.OnMapClickListener, GoogleMap.OnMa
         setAdapters()
         setClickListeners()
         setObservers()
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(
+            requireActivity()
+        )
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
     }
@@ -77,14 +83,25 @@ class ExploreFragment : Fragment(), GoogleMap.OnMapClickListener, GoogleMap.OnMa
     }
 
     private fun onFavoriteLocationWeatherSelected(currentWeatherResponse: CurrentWeatherResponse) {
-        val location = LatLng(currentWeatherResponse.coordinate.latitude, currentWeatherResponse.coordinate.longitude)
+        val location = LatLng(
+            currentWeatherResponse.coordinate.latitude,
+            currentWeatherResponse.coordinate.longitude
+        )
         moveCameraToLocation(location)
         closeFavoriteList()
     }
 
     private fun setObservers() {
         viewModel.favoriteLocationsWeather.observe(viewLifecycleOwner) {
+            map?.clear()
+            currentLocationMarker?.let { marker -> map?.addMarker(marker) }
             adapter.submitList(it)
+            it.forEach { weather ->
+                createLocationMarker(
+                    weather.coordinate.latitude,
+                    weather.coordinate.longitude,
+                )
+            }
         }
     }
 
@@ -205,10 +222,44 @@ class ExploreFragment : Fragment(), GoogleMap.OnMapClickListener, GoogleMap.OnMa
     }
 
     private fun addMarker(location: LatLng) {
-        map?.addMarker(
+        currentLocationMarker = MarkerOptions()
+            .position(location)
+        currentLocationMarker?.let {
+            map?.addMarker(it)
+        }
+    }
+
+    private fun createLocationMarker(
+        latitude: Double,
+        longitude: Double,
+    ): Marker? {
+        return map?.addMarker(
             MarkerOptions()
-                .position(location)
+                .position(LatLng(latitude, longitude))
+                .anchor(0.5f, 0.5f)
+                .icon(bitmapDescriptorFromVector(requireContext(), R.drawable.ic_favorite_location))
         )
+    }
+
+    private fun bitmapDescriptorFromVector(
+        context: Context,
+        @DrawableRes vectorResId: Int
+    ): BitmapDescriptor? {
+        val vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
+        vectorDrawable!!.setBounds(
+            0,
+            0,
+            vectorDrawable.intrinsicWidth,
+            vectorDrawable.intrinsicHeight
+        )
+        val bitmap = Bitmap.createBitmap(
+            vectorDrawable.intrinsicWidth,
+            vectorDrawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        vectorDrawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 
     override fun onMapClick(latLong: LatLng) {

@@ -10,7 +10,7 @@ import com.dvt.weatherapp.data.response.CurrentWeatherResponse
 @Dao
 interface WeatherDao {
 
-    @Query("SELECT * FROM CurrentWeatherResponse")
+    @Query("SELECT * FROM CurrentWeatherResponse ORDER BY lastUpdated")
     fun getAll(): LiveData<List<CurrentWeatherResponse>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

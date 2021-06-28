@@ -15,9 +15,10 @@ data class CurrentWeatherResponse(
     @SerializedName("dt") var dateTimeUnix: Long,
     @TypeConverters(DataConverter::class) @ColumnInfo(name = "weatherList") @SerializedName("weather") var weather: List<Weather>,
     @Embedded(prefix = "main") @SerializedName("main") var main: WeatherMain,
-    var favorite: Boolean
+    var favorite: Boolean,
+    var lastUpdated: Long
 ) {
-    constructor(): this(0, Coordinate(), 0L, emptyList(), WeatherMain(), false)
+    constructor(): this(0, Coordinate(), 0L, emptyList(), WeatherMain(), false, 0L)
 
     @Ignore fun getWeatherConditionCluster(): WeatherConditionCluster? {
         if (weather.isNullOrEmpty()) return null

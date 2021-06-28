@@ -1,6 +1,7 @@
 package com.dvt.weatherapp.data.repository
 
 import androidx.lifecycle.LiveData
+import com.dvt.weatherapp.common.util.DateTimeUtil
 import com.dvt.weatherapp.data.api.helper.IApiHelper
 import com.dvt.weatherapp.data.db.dao.WeatherDao
 import com.dvt.weatherapp.data.response.CurrentWeatherResponse
@@ -53,6 +54,7 @@ class WeatherRepository @Inject constructor(
     }
 
     suspend fun insertWeather(weather: CurrentWeatherResponse) {
+        weather.lastUpdated = DateTimeUtil.getCurrentTimeMills()
         weatherDao.insert(weather)
     }
 
