@@ -21,4 +21,7 @@ interface WeatherDao {
 
     @Query("SELECT * FROM CurrentWeatherResponse WHERE coordlatitude = :latitude AND coordlongitude = :longitude")
     suspend fun findByLatLon(latitude: Double?, longitude: Double?): CurrentWeatherResponse?
+
+    @Query("DELETE FROM CurrentWeatherResponse")
+    suspend fun clearAll()
 }

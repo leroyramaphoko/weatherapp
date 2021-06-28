@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -18,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.dvt.weatherapp.R
 import com.dvt.weatherapp.common.constant.AppConstants
+import com.dvt.weatherapp.common.extension.showIf
 import com.dvt.weatherapp.data.response.CurrentWeatherResponse
 import com.dvt.weatherapp.ui.adapter.FavoriteLocationWeatherAdapter
 import com.dvt.weatherapp.ui.viewmodel.ExploreViewModel
@@ -34,6 +36,7 @@ import kotlinx.android.synthetic.main.fragment_explore.*
 
 @AndroidEntryPoint
 class ExploreFragment : Fragment(), GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
+    private var fabClearAll: View? = null
     private var currentLocationMarker: MarkerOptions? = null
     private lateinit var headerView: View
     private lateinit var adapter: FavoriteLocationWeatherAdapter
@@ -96,6 +99,9 @@ class ExploreFragment : Fragment(), GoogleMap.OnMapClickListener, GoogleMap.OnMa
             map?.clear()
             currentLocationMarker?.let { marker -> map?.addMarker(marker) }
             adapter.submitList(it)
+            fabClearAll?.showIf(it.isNotEmpty())
+            headerView.findViewById<View>(R.id.view_no_weather_locations).showIf(it.isEmpty())
+
             it.forEach { weather ->
                 createLocationMarker(
                     weather.coordinate.latitude,
@@ -110,8 +116,22 @@ class ExploreFragment : Fragment(), GoogleMap.OnMapClickListener, GoogleMap.OnMa
             currentLocation?.let { moveCameraToLocation(it) }
         }
 
-        headerView.findViewById<View>(R.id.icon_close_favorite_list).setOnClickListener {
-            closeFavoriteList()
+        headerView.apply {
+            findViewById<View>(R.id.icon_close_favorite_list).setOnClickListener {
+                closeFavoriteList()
+            }
+            
+            fabClearAll = findViewById(R.id.fab_clear_all)
+
+            fabClearAll?.setOnClickListener {
+                AlertDialog.Builder(requireContext())
+                    .setMessage(R.string.confirm_clearing_weather_locations)
+                    .setNegativeButton(R.string.cancel) { _, _ -> }
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        viewModel.clearWeatherLocations()
+                    }
+                    .show()
+            }
         }
     }
 

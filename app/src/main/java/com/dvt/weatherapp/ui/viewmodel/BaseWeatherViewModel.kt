@@ -5,16 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dvt.weatherapp.common.enums.DateFormat
-import com.dvt.weatherapp.common.model.Coordinate
 import com.dvt.weatherapp.common.util.DateTimeUtil
+import com.dvt.weatherapp.data.repository.ForecastRepository
 import com.dvt.weatherapp.data.repository.WeatherRepository
 import com.dvt.weatherapp.data.response.CurrentWeatherResponse
+import com.dvt.weatherapp.data.response.ForecastResponse
 import com.dvt.weatherapp.ui.enums.WeatherState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 abstract class BaseWeatherViewModel(
-    private val repository: WeatherRepository
+    private val weatherRepository: WeatherRepository,
+    private val forecastRepository: ForecastRepository
 ): ViewModel() {
 
     private val _favoriteControl = MutableLiveData<Boolean>()
@@ -29,8 +31,8 @@ abstract class BaseWeatherViewModel(
     val weatherResponse: LiveData<CurrentWeatherResponse>
         get() = _weatherResponse
 
-    private val _forecastResponse = MutableLiveData<List<CurrentWeatherResponse>>()
-    val forecastResponse: LiveData<List<CurrentWeatherResponse>>
+    private val _forecastResponse = MutableLiveData<ForecastResponse>()
+    val forecastResponse: LiveData<ForecastResponse>
         get() = _forecastResponse
 
     private var _latitude: Double? = null
@@ -41,7 +43,7 @@ abstract class BaseWeatherViewModel(
         _longitude = longitude
         setState(WeatherState.LOADING)
 
-        val result = repository.getWeather(latitude, longitude)
+        val result = weatherRepository.getWeather(latitude, longitude)
 
         if (result.isSuccessful) {
             val data = result.body()
@@ -60,15 +62,11 @@ abstract class BaseWeatherViewModel(
     }
 
     private fun fetchForecast(latitude: Double, longitude: Double) = viewModelScope.launch(Dispatchers.IO) {
-        val result = repository.getForecast(latitude, longitude)
+        val result = forecastRepository.getForecast(latitude, longitude)
 
         if (result.isSuccessful) {
             val data = result.body()!!
-            val forecastList = data.list
-                .distinctBy { DateTimeUtil.format(it.dateTimeUnix, DateFormat.DAY_IN_FULL) }
-                .filter { DateTimeUtil.isDayInTheFuture(it.dateTimeUnix) }
-
-            _forecastResponse.postValue(forecastList)
+            _forecastResponse.postValue(data)
             setState(WeatherState.SUCCESS)
         } else {
             setState(WeatherState.ERROR)

@@ -7,9 +7,12 @@ import android.widget.LinearLayout
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import com.dvt.weatherapp.R
+import com.dvt.weatherapp.common.enums.DateFormat
 import com.dvt.weatherapp.common.model.TemperatureModel
 import com.dvt.weatherapp.common.model.WeatherMain
+import com.dvt.weatherapp.common.util.DateTimeUtil
 import com.dvt.weatherapp.data.response.CurrentWeatherResponse
+import com.dvt.weatherapp.data.response.ForecastResponse
 import com.dvt.weatherapp.databinding.WeatherViewBinding
 import com.dvt.weatherapp.ui.adapter.ForecastAdapter
 import com.dvt.weatherapp.ui.adapter.TemperatureAdapter
@@ -58,9 +61,13 @@ class WeatherView @JvmOverloads constructor(
         adapter.submitList(buildTemperatureList(main))
     }
 
-    fun setForecast(forecastList: List<CurrentWeatherResponse>) {
+    fun setForecast(forecast: ForecastResponse) {
         val adapter = ForecastAdapter()
         binding.recyclerViewForecast.adapter = adapter
+
+        val forecastList = forecast.list
+            .distinctBy { DateTimeUtil.format(it.dateTimeUnix, DateFormat.DAY_IN_FULL) }
+            .filter { DateTimeUtil.isDayInTheFuture(it.dateTimeUnix) }
         adapter.submitList(forecastList)
     }
 
