@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_weather_details.*
 
 @AndroidEntryPoint
 class WeatherDetailsFragment : BottomSheetDialogFragment() {
-    private var latLong: LatLng? = null
+    private var latLng: LatLng? = null
     private val viewModel by viewModels<WeatherDetailsViewModel>()
 
     override fun onCreateView(
@@ -38,16 +38,8 @@ class WeatherDetailsFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         arguments?.let { bundle ->
-            latLong = bundle.getParcelable(LAT_LON)
-            latLong?.let {
-                viewModel.fetchWeather(it.latitude, it.longitude)
-
-                text_location_lat_lon.text = getString(
-                    R.string.lat_lon,
-                    LatLonUtil.format(it.latitude),
-                    LatLonUtil.format(it.longitude)
-                )
-            }
+            latLng = bundle.getParcelable(LAT_LON)
+            displayLatLng(latLng)
         }
 
         setObservers()
@@ -55,9 +47,24 @@ class WeatherDetailsFragment : BottomSheetDialogFragment() {
         setClickListeners()
     }
 
+    private fun displayLatLng(latLng: LatLng?) {
+        latLng?.let {
+            viewModel.fetchWeather(it.latitude, it.longitude)
+            text_location_lat_lon.text = getString(
+                R.string.lat_lon,
+                LatLonUtil.format(it.latitude),
+                LatLonUtil.format(it.longitude)
+            )
+        }
+    }
+
     private fun setClickListeners() {
         fab_favorite_location.setOnClickListener {
             viewModel.onFabFavoriteLocationClicked()
+        }
+
+        view_error.onRetryClicked {
+            viewModel.onRetryClicked()
         }
     }
 
@@ -102,7 +109,7 @@ class WeatherDetailsFragment : BottomSheetDialogFragment() {
         private val TAG = WeatherDetailsFragment::class.java.simpleName
 
         fun newInstance(latLong: LatLng) = WeatherDetailsFragment().apply {
-            arguments = bundleOf(LAT_LON to LatLonUtil.correctDecimalPlaces(latLong))
+            arguments = bundleOf(LAT_LON to LatLonUtil.limitDecimalsOnLatLng(latLong))
         }
     }
 }

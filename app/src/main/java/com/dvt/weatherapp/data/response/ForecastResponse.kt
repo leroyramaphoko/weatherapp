@@ -12,7 +12,7 @@ import com.google.gson.annotations.SerializedName
 class ForecastResponse(
     @PrimaryKey(autoGenerate = true) var forecastId: Int,
     @Embedded(prefix = "city") @SerializedName("city") var city: City,
-    @TypeConverters(DataConverter::class) val list: List<CurrentWeatherResponse>
+    @TypeConverters(DataConverter::class) val list: List<WeatherResponse>
 ) {
     constructor() : this(0, City(), emptyList())
 }

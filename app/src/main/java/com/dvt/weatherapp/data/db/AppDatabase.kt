@@ -10,13 +10,13 @@ import com.dvt.weatherapp.common.model.Weather
 import com.dvt.weatherapp.common.model.WeatherMain
 import com.dvt.weatherapp.data.db.dao.ForecastDao
 import com.dvt.weatherapp.data.db.dao.WeatherDao
-import com.dvt.weatherapp.data.response.CurrentWeatherResponse
+import com.dvt.weatherapp.data.response.WeatherResponse
 import com.dvt.weatherapp.data.response.ForecastResponse
 
 @Database(entities = [
     Weather::class,
     WeatherMain::class,
-    CurrentWeatherResponse::class,
+    WeatherResponse::class,
     ForecastResponse::class,
     City::class,
     Coordinate::class

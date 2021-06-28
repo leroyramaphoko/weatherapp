@@ -9,7 +9,7 @@ import com.dvt.weatherapp.common.model.WeatherMain
 import com.google.gson.annotations.SerializedName
 
 @Entity
-data class CurrentWeatherResponse(
+data class WeatherResponse(
     @PrimaryKey(autoGenerate = true) var id: Int,
     @Embedded(prefix = "coord") @SerializedName("coord") var coordinate: Coordinate,
     @SerializedName("dt") var dateTimeUnix: Long,

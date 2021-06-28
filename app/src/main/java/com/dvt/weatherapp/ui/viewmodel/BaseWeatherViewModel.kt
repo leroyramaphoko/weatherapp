@@ -4,11 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dvt.weatherapp.common.enums.DateFormat
-import com.dvt.weatherapp.common.util.DateTimeUtil
 import com.dvt.weatherapp.data.repository.ForecastRepository
 import com.dvt.weatherapp.data.repository.WeatherRepository
-import com.dvt.weatherapp.data.response.CurrentWeatherResponse
+import com.dvt.weatherapp.data.response.WeatherResponse
 import com.dvt.weatherapp.data.response.ForecastResponse
 import com.dvt.weatherapp.ui.enums.WeatherState
 import kotlinx.coroutines.Dispatchers
@@ -27,8 +25,8 @@ abstract class BaseWeatherViewModel(
     val state: LiveData<WeatherState>
         get() = _state
 
-    private val _weatherResponse = MutableLiveData<CurrentWeatherResponse>()
-    val weatherResponse: LiveData<CurrentWeatherResponse>
+    private val _weatherResponse = MutableLiveData<WeatherResponse>()
+    val weatherResponse: LiveData<WeatherResponse>
         get() = _weatherResponse
 
     private val _forecastResponse = MutableLiveData<ForecastResponse>()
