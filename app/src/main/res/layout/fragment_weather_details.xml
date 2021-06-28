@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data class="WeatherDetailsBinding">
+        <import type="com.dvt.weatherapp.ui.enums.WeatherState" />
+        <variable
+            name="viewModel"
+            type="com.dvt.weatherapp.ui.viewmodel.WeatherDetailsViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="@dimen/spacing_xs"
+        tools:context=".ui.fragment.WeatherDetailsFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bottom_dialog_background">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:paddingHorizontal="@dimen/spacing_xs"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <View
+                    android:layout_width="100dp"
+                    android:layout_height="5dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:layout_marginBottom="@dimen/spacing_md"
+                    android:background="@drawable/bottom_dialog_handler" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.MaterialComponents.Headline5"
+                    android:text="@string/location"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text_location_lat_lon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    style="@style/TextAppearance.MaterialComponents.Headline6"
+                    tools:text="24.05923 lat / -23.42413 lon"/>
+
+                <com.dvt.weatherapp.ui.view.WeatherView
+                    android:id="@+id/view_weather"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_md"
+                    app:showIf="@{viewModel.state == WeatherState.SUCCESS}"/>
+
+                <com.dvt.weatherapp.ui.view.LoadingView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:showIf="@{viewModel.state == WeatherState.LOADING}"
+                    android:layout_margin="@dimen/spacing_xl"/>
+
+                <com.dvt.weatherapp.ui.view.ErrorView
+                    android:id="@+id/view_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:showIf="@{viewModel.state == WeatherState.ERROR}"
+                    android:layout_margin="@dimen/spacing_xl"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_favorite_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:src="@drawable/ic_favorite_unshaded"
+                app:showIf="@{viewModel.state == WeatherState.SUCCESS}"
+                android:layout_gravity="end"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:tint="@color/colorPrimary" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

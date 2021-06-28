@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data class="ForecastBinding">
+        <variable
+            name="weather"
+            type="com.dvt.weatherapp.data.response.WeatherResponse" />
+    </data>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:padding="@dimen/spacing_sm"
+        tools:background="@color/sunny">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_week_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:textColor="@color/primaryTextColor"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            tools:text="Tuesday"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/icon_weather"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_columnWeight="1"
+            android:gravity="center_horizontal"
+            android:textColor="@color/primaryTextColor"
+            tools:srcCompat="@drawable/rain" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/text_temperature"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:gravity="end"
+            android:textColor="@color/primaryTextColor"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            app:degree="@{weather.main.temperature}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="24°" />
+
+    </GridLayout>
+</layout>

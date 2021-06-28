@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data class="CurrentWeatherBinding">
+        <import type="com.dvt.weatherapp.ui.enums.WeatherState" />
+        <variable
+            name="viewModel"
+            type="com.dvt.weatherapp.ui.viewmodel.CurrentWeatherViewModel" />
+    </data>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        tools:context=".ui.fragment.CurrentWeatherFragment">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:showIf="@{viewModel.state == WeatherState.SUCCESS}"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="320dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/image_weather"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        tools:srcCompat="@drawable/forest_sunny"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/section_current_weather_details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/text_weather_temperature"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="60dp"
+                            android:textStyle="bold"
+                            app:degree="@{viewModel.weatherResponse.main.temperature}"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2"
+                            android:textColor="@color/primaryTextColor"
+                            tools:text="27°" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/text_weather_condition"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textAllCaps="true"
+                            android:layout_marginTop="@dimen/spacing_sm"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                            android:textColor="@color/primaryTextColor"
+                            tools:text="Rainy" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.dvt.weatherapp.ui.view.WeatherView
+                    android:id="@+id/view_weather"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.dvt.weatherapp.ui.view.LoadingView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:visibility="gone"
+                app:showIf="@{viewModel.state == WeatherState.LOADING}"/>
+
+            <com.dvt.weatherapp.ui.view.ErrorView
+                android:id="@+id/view_error"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:showIf="@{viewModel.state == WeatherState.ERROR}"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.core.widget.NestedScrollView>
+</layout>
