@@ -22,6 +22,7 @@ class WeatherDetailsViewModel @Inject constructor(
             weatherResponse.favorite = true
             repository.insertWeather(weatherResponse)
         }
+
         setFavoriteControl(weatherResponse.favorite)
     }
 

@@ -15,9 +15,5 @@
         android:name="com.dvt.weatherapp.ui.fragment.ExploreFragment"
         android:label="@string/explore_the_world"
         tools:layout="@layout/fragment_explore" />
-    <fragment
-        android:id="@+id/favoriteWeatherLocationsFragment"
-        android:name="com.dvt.weatherapp.ui.fragment.FavoriteWeatherLocationsFragment"
-        android:label="@string/current_weather_locations"
-        tools:layout="@layout/fragment_favorite_weather_locations" />
+
 </navigation>

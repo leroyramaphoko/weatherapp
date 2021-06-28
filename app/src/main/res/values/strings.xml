@@ -5,7 +5,6 @@
     <string name="something_went_wrong">Something went wrong!</string>
     <string name="retry">Retry</string>
     <string name="degree_placeholder">%s&#xb0;</string>
-    <string name="current_weather_locations">Favorite Weather Locations</string>
     <string name="min">min</string>
     <string name="current">Current</string>
     <string name="max">max</string>
