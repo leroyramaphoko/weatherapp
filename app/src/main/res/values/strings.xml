@@ -8,6 +8,11 @@
     <string name="min">min</string>
     <string name="current">Current</string>
     <string name="max">max</string>
+    <string name="no_saved_locations">No Saved Locations</string>
+    <string name="confirm_clearing_weather_locations">Are you sure you want to remove all the weather locations?</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="clear_all">Clear All</string>
     <string name="search">Search</string>
     <string name="location">Location</string>
     <string name="favorite_list">Favorite List</string>

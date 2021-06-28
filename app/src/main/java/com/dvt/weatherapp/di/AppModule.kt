@@ -7,6 +7,7 @@ import com.dvt.weatherapp.data.api.helper.ApiHelper
 import com.dvt.weatherapp.data.api.helper.IApiHelper
 import com.dvt.weatherapp.data.api.service.ApiService
 import com.dvt.weatherapp.data.db.AppDatabase
+import com.dvt.weatherapp.data.db.dao.ForecastDao
 import com.dvt.weatherapp.data.db.dao.WeatherDao
 import dagger.Module
 import dagger.Provides
@@ -77,4 +78,7 @@ object AppModule{
 
     @Provides
     fun provideWeatherDao(appDatabase: AppDatabase): WeatherDao = appDatabase.weatherDao()
+
+    @Provides
+    fun provideForecastDao(appDatabase: AppDatabase): ForecastDao = appDatabase.forecastDao()
 }
