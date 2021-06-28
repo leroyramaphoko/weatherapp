@@ -21,7 +21,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, EasyPermissions.RationaleCallbacks {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -32,10 +31,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setupDrawerLayout()
-
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
+        setupDrawerLayout()
         checkIfLocationIsEnabled()
     }
 
@@ -60,9 +58,9 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
         try {
             fusedLocationProviderClient.lastLocation.addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    task.result?.let { onLocationListener(LatLng(it.latitude, it.longitude)) }
+                    task.result?.let { handleLocation(LatLng(it.latitude, it.longitude)) }
                 } else {
-                    onLocationListener(AppConstants.DEFAULT_LOCATION)
+                    handleLocation(AppConstants.DEFAULT_LOCATION)
                 }
             }
         } catch (e: SecurityException) {
@@ -115,7 +113,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, E
         }
     }
 
-    private fun onLocationListener(latLng: LatLng) {
+    private fun handleLocation(latLng: LatLng) {
         viewModel.setCurrentLocation(latLng)
     }
 

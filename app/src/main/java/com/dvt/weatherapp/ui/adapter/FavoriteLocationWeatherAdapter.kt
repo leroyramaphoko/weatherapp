@@ -11,11 +11,11 @@ import com.dvt.weatherapp.R
 import com.dvt.weatherapp.common.enums.DateFormat
 import com.dvt.weatherapp.common.util.DateTimeUtil
 import com.dvt.weatherapp.common.util.LatLonUtil
-import com.dvt.weatherapp.data.response.CurrentWeatherResponse
+import com.dvt.weatherapp.data.response.WeatherResponse
 
 class FavoriteLocationWeatherAdapter(
-    private val onItemSelected: (CurrentWeatherResponse) -> Unit
-): ListAdapter<CurrentWeatherResponse, FavoriteLocationWeatherAdapter.ViewHolder>(DiffCallback()) {
+    private val onItemSelected: (WeatherResponse) -> Unit
+): ListAdapter<WeatherResponse, FavoriteLocationWeatherAdapter.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -40,13 +40,13 @@ class FavoriteLocationWeatherAdapter(
         }
     }
 
-    private class DiffCallback : DiffUtil.ItemCallback<CurrentWeatherResponse>() {
+    private class DiffCallback : DiffUtil.ItemCallback<WeatherResponse>() {
 
-        override fun areItemsTheSame(oldItem: CurrentWeatherResponse, newItem: CurrentWeatherResponse): Boolean {
+        override fun areItemsTheSame(oldItem: WeatherResponse, newItem: WeatherResponse): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: CurrentWeatherResponse, newItem: CurrentWeatherResponse): Boolean {
+        override fun areContentsTheSame(oldItem: WeatherResponse, newItem: WeatherResponse): Boolean {
             return oldItem == newItem
         }
     }

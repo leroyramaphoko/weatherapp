@@ -2,7 +2,7 @@ package com.dvt.weatherapp.common.converter
 
 import androidx.room.TypeConverter
 import com.dvt.weatherapp.common.model.Weather
-import com.dvt.weatherapp.data.response.CurrentWeatherResponse
+import com.dvt.weatherapp.data.response.WeatherResponse
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -10,6 +10,7 @@ class DataConverter {
     @TypeConverter
     fun fromWeatherList(weather: List<Weather>): String? {
         val type = object : TypeToken<List<Weather>>() {}.type
+
         return Gson().toJson(weather, type)
     }
 
@@ -24,18 +25,18 @@ class DataConverter {
     }
 
     @TypeConverter
-    fun fromForecastList(forecastList: List<CurrentWeatherResponse>): String? {
-        val type = object : TypeToken<List<CurrentWeatherResponse>>() {}.type
+    fun fromForecastList(forecastList: List<WeatherResponse>): String? {
+        val type = object : TypeToken<List<WeatherResponse>>() {}.type
         return Gson().toJson(forecastList, type)
     }
 
     @TypeConverter
-    fun toForecastList(forecastListString: String?): List<CurrentWeatherResponse>? {
+    fun toForecastList(forecastListString: String?): List<WeatherResponse>? {
         if (forecastListString == null) {
             return null
         }
 
-        val type = object : TypeToken<List<CurrentWeatherResponse?>?>() {}.type
-        return Gson().fromJson<List<CurrentWeatherResponse>>(forecastListString, type)
+        val type = object : TypeToken<List<WeatherResponse?>?>() {}.type
+        return Gson().fromJson<List<WeatherResponse>>(forecastListString, type)
     }
 }

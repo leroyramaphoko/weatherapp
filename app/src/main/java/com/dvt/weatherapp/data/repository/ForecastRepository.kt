@@ -1,6 +1,5 @@
 package com.dvt.weatherapp.data.repository
 
-import com.dvt.weatherapp.common.util.DateTimeUtil
 import com.dvt.weatherapp.data.api.helper.IApiHelper
 import com.dvt.weatherapp.data.db.dao.ForecastDao
 import com.dvt.weatherapp.data.response.ForecastResponse
@@ -18,9 +17,7 @@ class ForecastRepository @Inject constructor(
         longitude: Double
     ): Response<ForecastResponse> {
 
-        forecastDao.findByLatLon(latitude, longitude)?.let {
-            return Response.success(it)
-        }
+        forecastDao.findByLatLon(latitude, longitude)?.let { return Response.success(it) }
 
         return try {
             apiHelper.getForecast(latitude, longitude)

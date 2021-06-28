@@ -11,7 +11,7 @@ import com.dvt.weatherapp.common.enums.DateFormat
 import com.dvt.weatherapp.common.model.TemperatureModel
 import com.dvt.weatherapp.common.model.WeatherMain
 import com.dvt.weatherapp.common.util.DateTimeUtil
-import com.dvt.weatherapp.data.response.CurrentWeatherResponse
+import com.dvt.weatherapp.data.response.WeatherResponse
 import com.dvt.weatherapp.data.response.ForecastResponse
 import com.dvt.weatherapp.databinding.WeatherViewBinding
 import com.dvt.weatherapp.ui.adapter.ForecastAdapter
@@ -38,7 +38,7 @@ class WeatherView @JvmOverloads constructor(
         binding = WeatherViewBinding.inflate(inflater, this, true)
     }
 
-    fun setWeather(weatherResponse: CurrentWeatherResponse) {
+    fun setWeather(weatherResponse: WeatherResponse) {
         setTemperatureAdapter(weatherResponse.main)
 
         weatherResponse.getWeatherConditionCluster()?.let {
@@ -47,18 +47,19 @@ class WeatherView @JvmOverloads constructor(
     }
 
     private fun setTemperatureAdapter(main: WeatherMain?) {
-        if (main == null) return
-        val adapter = TemperatureAdapter()
+        main?.let {
+            val adapter = TemperatureAdapter()
 
-        val layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW)
-        layoutManager.justifyContent = JustifyContent.SPACE_BETWEEN
+            val layoutManager = FlexboxLayoutManager(context, FlexDirection.ROW)
+            layoutManager.justifyContent = JustifyContent.SPACE_BETWEEN
 
-        binding.recyclerViewWeather.apply {
-            this.layoutManager = layoutManager
-            this.adapter = adapter
+            binding.recyclerViewWeather.apply {
+                this.layoutManager = layoutManager
+                this.adapter = adapter
+            }
+
+            adapter.submitList(buildTemperatureList(it))
         }
-
-        adapter.submitList(buildTemperatureList(main))
     }
 
     fun setForecast(forecast: ForecastResponse) {

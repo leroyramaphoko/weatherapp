@@ -5,7 +5,7 @@
     <data class="ForecastBinding">
         <variable
             name="weather"
-            type="com.dvt.weatherapp.data.response.CurrentWeatherResponse" />
+            type="com.dvt.weatherapp.data.response.WeatherResponse" />
     </data>
 
     <GridLayout

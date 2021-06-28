@@ -63,6 +63,13 @@
                     android:layout_height="match_parent"
                     app:showIf="@{viewModel.state == WeatherState.LOADING}"
                     android:layout_margin="@dimen/spacing_xl"/>
+
+                <com.dvt.weatherapp.ui.view.ErrorView
+                    android:id="@+id/view_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:showIf="@{viewModel.state == WeatherState.ERROR}"
+                    android:layout_margin="@dimen/spacing_xl"/>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton

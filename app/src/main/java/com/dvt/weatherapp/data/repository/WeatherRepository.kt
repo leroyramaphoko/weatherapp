@@ -3,10 +3,8 @@ package com.dvt.weatherapp.data.repository
 import androidx.lifecycle.LiveData
 import com.dvt.weatherapp.common.util.DateTimeUtil
 import com.dvt.weatherapp.data.api.helper.IApiHelper
-import com.dvt.weatherapp.data.db.dao.ForecastDao
 import com.dvt.weatherapp.data.db.dao.WeatherDao
-import com.dvt.weatherapp.data.response.CurrentWeatherResponse
-import com.dvt.weatherapp.data.response.ForecastResponse
+import com.dvt.weatherapp.data.response.WeatherResponse
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -19,11 +17,9 @@ class WeatherRepository @Inject constructor(
     suspend fun getWeather(
         latitude: Double,
         longitude: Double
-    ): Response<CurrentWeatherResponse> {
+    ): Response<WeatherResponse> {
 
-        weatherDao.findByLatLon(latitude, longitude)?.let {
-            return Response.success(it)
-        }
+        weatherDao.findByLatLon(latitude, longitude)?.let { return Response.success(it) }
 
         return try {
             apiHelper.getWeather(latitude, longitude)
@@ -32,16 +28,16 @@ class WeatherRepository @Inject constructor(
         }
     }
 
-    suspend fun insert(weather: CurrentWeatherResponse) {
+    suspend fun insert(weather: WeatherResponse) {
         weather.lastUpdated = DateTimeUtil.getCurrentTimeMills()
         weatherDao.insert(weather)
     }
 
-    suspend fun delete(weather: CurrentWeatherResponse) {
+    suspend fun delete(weather: WeatherResponse) {
         weatherDao.delete(weather.coordinate.latitude, weather.coordinate.longitude)
     }
 
-    fun getFavoriteWeatherConditions(): LiveData<List<CurrentWeatherResponse>> {
+    fun getFavoriteWeatherConditions(): LiveData<List<WeatherResponse>> {
         return weatherDao.getAll()
     }
 
