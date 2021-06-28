@@ -68,7 +68,7 @@ class WeatherView @JvmOverloads constructor(
 
         val forecastList = forecast.list
             .distinctBy { DateTimeUtil.format(it.dateTimeUnix, DateFormat.DAY_IN_FULL) }
-            .filter { DateTimeUtil.isDayInTheFuture(it.dateTimeUnix) }
+            .filter { DateTimeUtil.isDayNotToday(it.dateTimeUnix) }
         adapter.submitList(forecastList)
     }
 

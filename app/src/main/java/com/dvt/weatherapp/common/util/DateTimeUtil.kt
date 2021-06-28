@@ -23,10 +23,10 @@ class DateTimeUtil {
             return calendar
         }
 
-        fun isDayInTheFuture(input: Long): Boolean {
+        fun isDayNotToday(input: Long): Boolean {
             val targetCalendar = buildCalendarFromTimesInMills(input)
 
-            return targetCalendar.get(Calendar.DAY_OF_MONTH) > Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+            return targetCalendar.get(Calendar.DAY_OF_MONTH) != Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         }
 
         fun getCurrentTimeMills(): Long {
