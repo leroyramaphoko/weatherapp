@@ -6,10 +6,10 @@ import com.google.gson.annotations.SerializedName
 
 @Entity
 data class WeatherMain(
-    @PrimaryKey(autoGenerate = true) var id: Int = 0,
-    @SerializedName("temp") var temperature: Double = 0.00,
-    @SerializedName("temp_min") var temperatureMin: Double = 0.00,
-    @SerializedName("temp_max") var temperatureMax: Double = 0.00
+    @PrimaryKey(autoGenerate = true) var id: Int,
+    @SerializedName("temp") var temperature: Double,
+    @SerializedName("temp_min") var temperatureMin: Double,
+    @SerializedName("temp_max") var temperatureMax: Double
 ) {
     constructor() : this(0, 0.00, 0.00, 0.00)
 }

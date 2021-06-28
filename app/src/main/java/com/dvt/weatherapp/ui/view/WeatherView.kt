@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import com.dvt.weatherapp.R
 import com.dvt.weatherapp.common.model.TemperatureModel
 import com.dvt.weatherapp.common.model.WeatherMain
-import com.dvt.weatherapp.common.model.WeatherWithForecastModel
+import com.dvt.weatherapp.data.response.CurrentWeatherResponse
 import com.dvt.weatherapp.databinding.WeatherViewBinding
 import com.dvt.weatherapp.ui.adapter.ForecastAdapter
 import com.dvt.weatherapp.ui.adapter.TemperatureAdapter
@@ -35,11 +35,10 @@ class WeatherView @JvmOverloads constructor(
         binding = WeatherViewBinding.inflate(inflater, this, true)
     }
 
-    fun setWeatherWithForecastModel(weatherWithForecastModel: WeatherWithForecastModel) {
-        setTemperatureAdapter(weatherWithForecastModel.weather.main)
-        setForecastAdapter(weatherWithForecastModel)
+    fun setWeather(weatherResponse: CurrentWeatherResponse) {
+        setTemperatureAdapter(weatherResponse.main)
 
-        weatherWithForecastModel.weather.getWeatherConditionCluster()?.let {
+        weatherResponse.getWeatherConditionCluster()?.let {
             it.colorRes?.let { colorRes -> binding.container.setBackgroundColor(ContextCompat.getColor(context, colorRes)) }
         }
     }
@@ -59,10 +58,10 @@ class WeatherView @JvmOverloads constructor(
         adapter.submitList(buildTemperatureList(main))
     }
 
-    private fun setForecastAdapter(weatherWithForecastModel: WeatherWithForecastModel) {
+    fun setForecast(forecastList: List<CurrentWeatherResponse>) {
         val adapter = ForecastAdapter()
         binding.recyclerViewForecast.adapter = adapter
-        adapter.submitList(weatherWithForecastModel.forecastList)
+        adapter.submitList(forecastList)
     }
 
     private fun buildTemperatureList(weatherMain: WeatherMain): List<TemperatureModel> {

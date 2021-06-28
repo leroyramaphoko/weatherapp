@@ -12,12 +12,7 @@ import androidx.fragment.app.viewModels
 import com.dvt.weatherapp.R
 import com.dvt.weatherapp.common.util.LatLonUtil
 import com.dvt.weatherapp.databinding.WeatherDetailsBinding
-import com.dvt.weatherapp.ui.adapter.ForecastAdapter
-import com.dvt.weatherapp.ui.adapter.TemperatureAdapter
 import com.dvt.weatherapp.ui.viewmodel.WeatherDetailsViewModel
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.flexbox.JustifyContent
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -66,11 +61,22 @@ class WeatherDetailsFragment : BottomSheetDialogFragment() {
         }
     }
 
-
     private fun setObservers() {
         viewModel.apply {
-            weatherWithForecastModel.observe(viewLifecycleOwner) {
-                view_weather.setWeatherWithForecastModel(it)
+            weatherResponse.observe(viewLifecycleOwner) {
+                view_weather.setWeather(it)
+            }
+
+            forecastResponse.observe(viewLifecycleOwner) {
+                view_weather.setForecast(it)
+            }
+
+            favoriteControl.observe(viewLifecycleOwner) {
+                if (it) {
+                    fab_favorite_location.setImageResource(R.drawable.ic_favorite)
+                } else {
+                    fab_favorite_location.setImageResource(R.drawable.ic_favorite_unshaded)
+                }
             }
         }
     }
@@ -96,7 +102,7 @@ class WeatherDetailsFragment : BottomSheetDialogFragment() {
         private val TAG = WeatherDetailsFragment::class.java.simpleName
 
         fun newInstance(latLong: LatLng) = WeatherDetailsFragment().apply {
-            arguments = bundleOf(LAT_LON to latLong)
+            arguments = bundleOf(LAT_LON to LatLonUtil.correctDecimalPlaces(latLong))
         }
     }
 }

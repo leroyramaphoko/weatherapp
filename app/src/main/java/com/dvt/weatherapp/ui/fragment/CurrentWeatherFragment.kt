@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.dvt.weatherapp.common.util.TemperatureUtil
 import com.dvt.weatherapp.data.response.CurrentWeatherResponse
 import com.dvt.weatherapp.databinding.CurrentWeatherBinding
 import com.dvt.weatherapp.ui.enums.WeatherState
@@ -47,9 +48,13 @@ class CurrentWeatherFragment : Fragment() {
         }
 
         viewModel.apply {
-            weatherWithForecastModel.observe(viewLifecycleOwner) {
-                displayCurrentWeatherCondition(it.weather)
-                view_weather.setWeatherWithForecastModel(it)
+            weatherResponse.observe(viewLifecycleOwner) {
+                displayCurrentWeatherCondition(it)
+                view_weather.setWeather(it)
+            }
+
+            forecastResponse.observe(viewLifecycleOwner) {
+                view_weather.setForecast(it)
             }
         }
     }

@@ -71,12 +71,12 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 tools:visibility="visible"
+                android:src="@drawable/ic_favorite_unshaded"
                 app:showIf="@{viewModel.state == WeatherState.SUCCESS}"
                 android:layout_gravity="end"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="@color/white"
-                android:src="@{viewModel.weatherWithForecastModel.favorite ? @drawable/ic_favorite : @drawable/ic_favorite_unshaded}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:tint="@color/colorPrimary" />

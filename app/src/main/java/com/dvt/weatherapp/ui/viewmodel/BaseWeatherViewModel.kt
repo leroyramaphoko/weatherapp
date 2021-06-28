@@ -5,25 +5,33 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dvt.weatherapp.common.enums.DateFormat
-import com.dvt.weatherapp.common.model.WeatherWithForecastModel
+import com.dvt.weatherapp.common.model.Coordinate
 import com.dvt.weatherapp.common.util.DateTimeUtil
-import com.dvt.weatherapp.data.repository.MainRepository
+import com.dvt.weatherapp.data.repository.WeatherRepository
 import com.dvt.weatherapp.data.response.CurrentWeatherResponse
 import com.dvt.weatherapp.ui.enums.WeatherState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 abstract class BaseWeatherViewModel(
-    private val repository: MainRepository
+    private val repository: WeatherRepository
 ): ViewModel() {
+
+    private val _favoriteControl = MutableLiveData<Boolean>()
+    val favoriteControl: LiveData<Boolean>
+        get() = _favoriteControl
 
     private val _state = MutableLiveData<WeatherState>()
     val state: LiveData<WeatherState>
         get() = _state
 
-    private val _weatherWithForecastModel = MutableLiveData<WeatherWithForecastModel>()
-    val weatherWithForecastModel: LiveData<WeatherWithForecastModel>
-        get() = _weatherWithForecastModel
+    private val _weatherResponse = MutableLiveData<CurrentWeatherResponse>()
+    val weatherResponse: LiveData<CurrentWeatherResponse>
+        get() = _weatherResponse
+
+    private val _forecastResponse = MutableLiveData<List<CurrentWeatherResponse>>()
+    val forecastResponse: LiveData<List<CurrentWeatherResponse>>
+        get() = _forecastResponse
 
     private var _latitude: Double? = null
     private var _longitude: Double? = null
@@ -38,17 +46,20 @@ abstract class BaseWeatherViewModel(
         if (result.isSuccessful) {
             val data = result.body()
             val currentWeather = data!!
-            fetchForecast(latitude, longitude, currentWeather)
+
+            _weatherResponse.postValue(currentWeather)
+            setFavoriteControl(currentWeather.favorite)
+            fetchForecast(latitude, longitude)
         } else {
             setState(WeatherState.ERROR)
         }
     }
 
-    private fun fetchForecast(
-        latitude: Double,
-        longitude: Double,
-        currentWeather: CurrentWeatherResponse
-    ) = viewModelScope.launch(Dispatchers.IO) {
+    fun setFavoriteControl(favorite: Boolean) {
+        _favoriteControl.postValue(favorite)
+    }
+
+    private fun fetchForecast(latitude: Double, longitude: Double) = viewModelScope.launch(Dispatchers.IO) {
         val result = repository.getForecast(latitude, longitude)
 
         if (result.isSuccessful) {
@@ -57,13 +68,7 @@ abstract class BaseWeatherViewModel(
                 .distinctBy { DateTimeUtil.format(it.dateTimeUnix, DateFormat.DAY_IN_FULL) }
                 .filter { DateTimeUtil.isDayInTheFuture(it.dateTimeUnix) }
 
-            val weatherWithForecastModel = WeatherWithForecastModel(
-                weather = currentWeather,
-                forecastList = forecastList,
-                favorite = false
-            )
-
-            _weatherWithForecastModel.postValue(weatherWithForecastModel)
+            _forecastResponse.postValue(forecastList)
             setState(WeatherState.SUCCESS)
         } else {
             setState(WeatherState.ERROR)
@@ -80,9 +85,4 @@ abstract class BaseWeatherViewModel(
 
         fetchWeather(latitude, longitude)
     }
-
-    fun setWeatherWithForecastModel(weatherWithForecastModel: WeatherWithForecastModel) {
-        _weatherWithForecastModel.value = weatherWithForecastModel
-    }
-
 }

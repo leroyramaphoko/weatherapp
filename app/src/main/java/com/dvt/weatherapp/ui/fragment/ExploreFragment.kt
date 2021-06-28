@@ -5,14 +5,18 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.dvt.weatherapp.R
 import com.dvt.weatherapp.common.constant.AppConstants
+import com.dvt.weatherapp.data.response.CurrentWeatherResponse
+import com.dvt.weatherapp.ui.adapter.FavoriteLocationWeatherAdapter
+import com.dvt.weatherapp.ui.viewmodel.ExploreViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -22,14 +26,19 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_explore.*
 
+@AndroidEntryPoint
 class ExploreFragment : Fragment(), GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
+    private lateinit var headerView: View
+    private lateinit var adapter: FavoriteLocationWeatherAdapter
     private var lastKnownLocation: Location? = null
     private var locationPermissionGranted: Boolean = false
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var map: GoogleMap? = null
     private var currentLocation: LatLng? = null
+    private val viewModel by viewModels<ExploreViewModel>()
 
     private val callback = OnMapReadyCallback { googleMap ->
         map = googleMap
@@ -44,22 +53,48 @@ class ExploreFragment : Fragment(), GoogleMap.OnMapClickListener, GoogleMap.OnMa
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_explore, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        headerView = nav_view.getHeaderView(0)
+        setAdapters()
         setClickListeners()
-
+        setObservers()
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
     }
 
+    private fun setAdapters() {
+        adapter = FavoriteLocationWeatherAdapter(::onFavoriteLocationWeatherSelected)
+
+        val recyclerViewFavoriteLocationWeather = headerView.findViewById<RecyclerView>(R.id.recycler_view_favorite_location_weather)
+        recyclerViewFavoriteLocationWeather.adapter = adapter
+    }
+
+    private fun onFavoriteLocationWeatherSelected(currentWeatherResponse: CurrentWeatherResponse) {
+        val location = LatLng(currentWeatherResponse.coordinate.latitude, currentWeatherResponse.coordinate.longitude)
+        moveCameraToLocation(location)
+        closeFavoriteList()
+    }
+
+    private fun setObservers() {
+        viewModel.favoriteLocationsWeather.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+    }
+
     private fun setClickListeners() {
         fab_current_location.setOnClickListener {
             currentLocation?.let { moveCameraToLocation(it) }
+        }
+
+        headerView.findViewById<View>(R.id.icon_close_favorite_list).setOnClickListener {
+            closeFavoriteList()
         }
     }
 
@@ -185,6 +220,26 @@ class ExploreFragment : Fragment(), GoogleMap.OnMapClickListener, GoogleMap.OnMa
         onMapClick(marker.position)
 
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.favourite_list -> openFavoriteList()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.explore_menu_top, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun openFavoriteList() {
+        drawer_layout.openDrawer(GravityCompat.END)
+    }
+
+    private fun closeFavoriteList() {
+        drawer_layout.closeDrawer(GravityCompat.END)
     }
 
     companion object {

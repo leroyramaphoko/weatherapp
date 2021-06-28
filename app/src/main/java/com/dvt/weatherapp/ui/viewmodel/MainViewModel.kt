@@ -3,6 +3,7 @@ package com.dvt.weatherapp.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.dvt.weatherapp.common.util.LatLonUtil
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -14,6 +15,10 @@ class MainViewModel @Inject constructor(): ViewModel() {
         get() = _currentLocation
 
     fun setCurrentLocation(latLng: LatLng) {
-        _currentLocation.value = latLng
+        val formattedLatLng = LatLng(
+            LatLonUtil.round(latLng.latitude),
+            LatLonUtil.round(latLng.longitude),
+        )
+        _currentLocation.value = formattedLatLng
     }
 }

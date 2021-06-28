@@ -50,13 +50,14 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/text_weather_temperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="60dp"
                             android:textStyle="bold"
+                            app:degree="@{viewModel.weatherResponse.main.temperature}"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2"
                             android:textColor="@color/primaryTextColor"
-                            app:degree="@{viewModel.weatherWithForecastModel.weather.main.temperature}"
                             tools:text="27°" />
 
                         <com.google.android.material.textview.MaterialTextView
